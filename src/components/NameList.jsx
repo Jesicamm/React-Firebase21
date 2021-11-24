@@ -7,15 +7,21 @@ const NameList = () => {
     const [list, setList] = useState([])
     const [updateName, setUpdateName] = useState(false)
     const [id, setId] = useState('')
+    const [error, setError] = useState(null)
 
     const addName = (e) => {
         e.preventDefault()
+        if (!name.trim()){
+            setError('El campo nombre está vacío')
+            return
+        }
         const newName = {
             id: uniqid(),
             name
         }
         setList([...list,newName])
         setName('')
+        setError(null)
     }
 
     const deleteName = (id) => {
@@ -32,6 +38,8 @@ const NameList = () => {
         e.preventDefault()
         const newUpdateList = list.map (item => item.id === id ? {id:id, name:name} : item)
         setList(newUpdateList)
+        setUpdateName(false)
+        setName('')
     }
     return(
         <div>
@@ -58,6 +66,13 @@ const NameList = () => {
                         <input onChange={(e)=>setName(e.target.value)} className="form-control mb-3" type="text" placeholder="Introduce el nombre" value={name}/>
                         <input className="btn btn-info btn-block" type="submit" value={updateName ? 'Actualizar nombre' : 'Introducir nombre'}/>
                     </form>
+                    {
+                        error != null ? (
+                            <div className="alert alert-danger">{error}</div>
+                        ) :(
+                            <div></div>
+                        )
+                    }
                 </div>
             </div>
         </div>
